@@ -50,7 +50,16 @@ class Controller:
         self._view.update_page()
 
     def handleRicorsione(self, e):
-        pass
+        src_id = self._view._ddNode.value
+        path = self._model.getHeaviestPath(src_id)
+        self._view.txt_result.controls.append(
+            ft.Text(f"\nTrovato il cammino più pesante | weight = {self._model.peso(path)}", color="blue"))
+        output = ""
+        for n in path:
+            output += f"{n} -> "
+        output = output.rstrip(" -> ")
+        self._view.txt_result.controls.append(ft.Text(f"{output}"))
+        self._view.update_page()
 
     def fillDDStore(self):
         stores = self._model.getAllStores()
@@ -64,4 +73,5 @@ class Controller:
 
     def abilitateCerca(self, e):
         self._view._btnCerca.disabled = False
+        self._view._btnRicorsione.disabled = False
         self._view.update_page()

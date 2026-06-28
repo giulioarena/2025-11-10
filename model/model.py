@@ -10,6 +10,8 @@ class Model:
         self.graph = nx.DiGraph()
         self.idMapOrders = {}
         self.idMapStores = {}
+        self.bestPath = []
+
 
     def getAllStores(self):
         stores = DAO.getAllStores()
@@ -54,6 +56,34 @@ class Model:
 
         return path
 
+    def getHeaviestPath(self, src_id):
+        src = self.idMapOrders[int(src_id)]
+        self.bestPath = []
+        partial = [src]
+        for n in self.graph.successors(src):
+            partial.append(n)
+            self.ricorsione(partial)
+            partial.pop()
+
+        return self.bestPath
+
+    def ricorsione(self, partial):
+        if self.peso(partial) > self.peso(self.bestPath):
+            self.bestPath = copy.deepcopy(partial)
+
+        for n in self.graph.successors(partial[-1]):
+            if self.graph.get_edge_data(partial[-1], n)["weight"] < self.graph.get_edge_data(partial[-2], partial[-1])["weight"]:
+                partial.append(n)
+                self.ricorsione(partial)
+                partial.pop()
+
+    def peso(self, path):
+        if len(path) < 2:
+            return 0
+        peso = 0
+        for i in range(len(path) - 1):
+            peso += self.graph.get_edge_data(path[i], path[i + 1])["weight"]
+        return peso
 
 
 
