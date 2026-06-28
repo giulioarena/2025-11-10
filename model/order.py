@@ -5,9 +5,9 @@ class Order:
     order_id: int
     customer_id: int
     order_status: int
-    order_date: datetime
-    required_date: datetime
-    shipped_date: datetime
+    order_date: datetime.date
+    required_date: datetime.date
+    shipped_date: datetime.date
     store_id: int
     staff_id: int
 
